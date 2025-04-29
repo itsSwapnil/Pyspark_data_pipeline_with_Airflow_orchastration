@@ -1,0 +1,21 @@
+record_id,vehicle_id,service_type,cost,date
+1,101,Oil Change,120,15-03-2019
+2,101,Tire Rotation,80,18-04-2020
+3,102,Brake Check,150,22-06-2021
+4,103,Oil Change,130,10-07-2020
+5,104,Battery Check,200,05-01-2022
+6,105,Tire Rotation,90,20-05-2019
+7,106,Brake Check,170,15-11-2021
+8,107,Oil Change,110,10-03-2020
+9,108,Full Service,400,08-10-2021
+10,109,Oil Change,100,22-06-2020
+11,110,Brake Check,250,17-02-2023
+12,101,Engine Check,300,01-09-2021
+13,105,Full Service,350,12-02-2020
+14,109,Tire Rotation,70,30-04-2021
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
