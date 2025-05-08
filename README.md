@@ -121,8 +121,8 @@ Hive – Spark SQL backend support
 ---
 🙋 Author
 
-LinkedIn:
+LinkedIn: http://www.linkedin.com/in/SwapnilTaware
 
-GitHub: 
+GitHub: https://github.com/itsSwapnil
 
 ---
