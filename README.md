@@ -83,10 +83,12 @@ vehicle-data-project/
 
 ### Core dependencies
 pyspark==3.5.1
+
 pandas==2.2.1
 
 ### Airflow and operators
 apache-airflow==2.6.3
+
 apache-airflow-providers-ssh==3.6.3
 
 ### MySQL (optional, as seen in imports)
@@ -109,6 +111,7 @@ cd pyspark-incremental-airflow
 ---
 
 🛡️ Technologies Used
+
 PySpark – ETL and data transformations
 
 Apache Airflow – Pipeline orchestration
