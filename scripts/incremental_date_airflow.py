@@ -27,7 +27,7 @@ d4 = today.strftime("%Y-%b-%d")
 default_args = {
     'owner': 'airflow',
     'start_date': airflow.utils.dates.days_ago(1),
-    'email': ['ss8.ttl@tatamotors.com'],
+    'email': NULL,
     'email_on_failure': False,
     'email_on_success': False,
     'depends_on_past': False,
@@ -46,7 +46,7 @@ dag = DAG(
     schedule_interval=None
     )
 
-ssh_conn_id = "erc_bdt"
+ssh_conn_id = "hadoop"
 
 Start=DummyOperator(task_id="Start",dag=dag)
 
