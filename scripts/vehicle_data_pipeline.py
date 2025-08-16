@@ -16,9 +16,9 @@ with open("scripts/date.txt", "r") as f:
 print("Processing Date:", process_date)
 
 
-vehicles_df = spark.read.csv("data/vehicles.csv", header=True, inferSchema=True)
-usage_df = spark.read.csv("data/sales.csv", header=True, inferSchema=True)
-maintenance_df = spark.read.csv("data/maintenance.csv", header=True, inferSchema=True)
+vehicles_df = spark.read.csv(f"data/{process_date}/vehicles.csv", header=True, inferSchema=True)
+usage_df = spark.read.csv(f"data/{process_date}/sales.csv", header=True, inferSchema=True)
+maintenance_df = spark.read.csv(f"data/{process_date}/maintenance.csv", header=True, inferSchema=True)
 
 vehicles_df=vehicles_df.withColumn('created_date', to_date(vehicles_df['created_date'], 'dd-MM-yyyy'))
 maintenance_df=maintenance_df.withColumn('date', to_date(maintenance_df['date'], 'dd-MM-yyyy'))
