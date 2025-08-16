@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 file_paths = [
-    "/scripts/date128.txt"
+    "/scripts/date.txt"
 ]
 
 # Read the .txt file and increment it with 1
@@ -19,3 +19,4 @@ for file_path in file_paths:
 
     except Exception as e:
         print(f"Error processing {file_path}: {e}")
+
