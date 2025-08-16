@@ -27,7 +27,7 @@ d4 = today.strftime("%Y-%b-%d")
 default_args = {
     'owner': 'airflow',
     'start_date': airflow.utils.dates.days_ago(1),
-    'email': NULL,
+    'email': ['ss8.ttl@tatamotors.com'],
     'email_on_failure': False,
     'email_on_success': False,
     'depends_on_past': False,
@@ -46,7 +46,7 @@ dag = DAG(
     schedule_interval=None
     )
 
-ssh_conn_id = "hadoop"
+ssh_conn_id = "ssh_vehicle"
 
 Start=DummyOperator(task_id="Start",dag=dag)
 
@@ -54,40 +54,16 @@ Start=DummyOperator(task_id="Start",dag=dag)
 Task1 = SSHOperator(
                     ssh_conn_id=ssh_conn_id,
                     task_id='data_preprocessing',
-                    command='spark-submit --num-executors 12 --executor-cores 5 --executor-memory 23g --driver-memory 23g --driver-cores 6  --conf spark.dynamicAllocation.enabled=false --conf spark.sql.catalogImplementation=hive --conf spark.hadoop.hive.exec.dynamic.partition=true --conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict --conf spark.hadoop.hive.enforce.bucketing=true --conf spark.shuffle.compress=true --conf spark.broadcast.compress=true  --conf spark.sql.autoBroadcastJoinThreshold=-1 --conf spark.sql.files.ignoreCorruptFiles=true  /scripts/incremental_date_airflow.py  & > /scripts/logs/incremental_date_airflow.log', depends_on_past=False, dag=dag)
+                    command='spark-submit --num-executors 12 --executor-cores 5 --executor-memory 23g --driver-memory 23g --driver-cores 6  --conf spark.dynamicAllocation.enabled=false --conf spark.sql.catalogImplementation=hive --conf spark.hadoop.hive.exec.dynamic.partition=true --conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict --conf spark.hadoop.hive.enforce.bucketing=true --conf spark.shuffle.compress=true --conf spark.broadcast.compress=true  --conf spark.sql.autoBroadcastJoinThreshold=-1 --conf spark.sql.files.ignoreCorruptFiles=true  /code/vehicle_data_pipeline.py  & > /code/logs/vehicle_data_pipeline.log', depends_on_past=False, dag=dag)
 
 Task2 = SSHOperator(
                     ssh_conn_id=ssh_conn_id,
                     task_id='incremental_date',
-                    command='python3 /scripts/incremental_date.py > /scripts/logs/incremental_date_$(date +\\%Y-\\%m-\\%d).log',
+                    command='python3 /code/incremental_date.py > /code/logs/incremental_date_$(date +\\%Y-\\%m-\\%d).log',
                     depends_on_past=False,dag=dag)
 
 
-
-def should_continue_multiple_dates():
-    date_files = [
-        "/scripts/date.txt"
-    ]
-    yesterday = datetime.today().date() - timedelta(days=1)
-    for file_path in date_files:
-        with open(file_path, "r") as f:
-            current_date = datetime.strptime(f.read().strip(), "%Y-%m-%d").date()
-            if current_date < yesterday:
-                print(f"{file_path} = {current_date} < {yesterday} → Continue")
-                return True
-            else:
-                print(f"{file_path} = {current_date} >= {yesterday}")
-    print("All date files have reached the limit. DAG will stop here.")
-    return False
-
-
-Task3 = ShortCircuitOperator(
-                    task_id="check_all_date_files",
-                    python_callable=should_continue_multiple_dates,
-                    dag=dag)
-
-
-Task4 = TriggerDagRunOperator(
+Task3 = TriggerDagRunOperator(
                     task_id='Trigger_dag_increment_date',
                     trigger_dag_id='vehicle-usage-service-Incremental',
                     dag=dag)
@@ -96,4 +72,4 @@ Task4 = TriggerDagRunOperator(
 End=DummyOperator(task_id="End",dag=dag)
 
 
-Start>>Task1>>Task2>>Task3>>Task4>>End
+Start>>Task1>>Task2>>Task3>>End
