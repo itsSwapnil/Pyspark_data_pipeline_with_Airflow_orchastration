@@ -27,7 +27,7 @@ d4 = today.strftime("%Y-%b-%d")
 default_args = {
     'owner': 'airflow',
     'start_date': airflow.utils.dates.days_ago(1),
-    'email': ['ss8.ttl@tatamotors.com'],
+    'email': None,
     'email_on_failure': False,
     'email_on_success': False,
     'depends_on_past': False,
@@ -54,12 +54,12 @@ Start=DummyOperator(task_id="Start",dag=dag)
 Task1 = SSHOperator(
                     ssh_conn_id=ssh_conn_id,
                     task_id='data_preprocessing',
-                    command='spark-submit --num-executors 12 --executor-cores 5 --executor-memory 23g --driver-memory 23g --driver-cores 6  --conf spark.dynamicAllocation.enabled=false --conf spark.sql.catalogImplementation=hive --conf spark.hadoop.hive.exec.dynamic.partition=true --conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict --conf spark.hadoop.hive.enforce.bucketing=true --conf spark.shuffle.compress=true --conf spark.broadcast.compress=true  --conf spark.sql.autoBroadcastJoinThreshold=-1 --conf spark.sql.files.ignoreCorruptFiles=true  /code/vehicle_data_pipeline.py  & > /code/logs/vehicle_data_pipeline.log', depends_on_past=False, dag=dag)
+                    command='spark-submit --num-executors 12 --executor-cores 5 --executor-memory 23g --driver-memory 23g --driver-cores 6  --conf spark.dynamicAllocation.enabled=false --conf spark.sql.catalogImplementation=hive --conf spark.hadoop.hive.exec.dynamic.partition=true --conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict --conf spark.hadoop.hive.enforce.bucketing=true --conf spark.shuffle.compress=true --conf spark.broadcast.compress=true  --conf spark.sql.autoBroadcastJoinThreshold=-1 --conf spark.sql.files.ignoreCorruptFiles=true  /scripts/vehicle_data_pipeline.py  & > /scripts/logs/vehicle_data_pipeline.log', depends_on_past=False, dag=dag)
 
 Task2 = SSHOperator(
                     ssh_conn_id=ssh_conn_id,
                     task_id='incremental_date',
-                    command='python3 /code/incremental_date.py > /code/logs/incremental_date_$(date +\\%Y-\\%m-\\%d).log',
+                    command='python3 /scripts/incremental_date.py > /scripts/logs/incremental_date_$(date +\\%Y-\\%m-\\%d).log',
                     depends_on_past=False,dag=dag)
 
 
